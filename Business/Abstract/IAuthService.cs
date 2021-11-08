@@ -1,6 +1,7 @@
 ﻿using Core.Entity.Concrete;
 using Core.Utilities.Results;
 using Core.Utilities.Security.JWT;
+using Entity.Concrete;
 using Entity.Concrete.Dto;
 using System;
 using System.Collections.Generic;
@@ -17,4 +18,6 @@ namespace Business.Abstract
         IResult UserExists(string username);
         IDataResult<AccessToken> CreateAccessToken(User user);
     }
+
+  
 }

@@ -45,7 +45,9 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<UserManager>().As<IUserService>();
             builder.RegisterType<EfUserDal>().As<IUserDal>();
 
-            builder.RegisterType<IFileHelper>().As<FileHelper>();
+            builder.RegisterType<FileHelper>().As<IFileHelper>();
+            builder.RegisterType<ImageManager>().As<IImageService>();
+            builder.RegisterType<EfImageDal>().As<IImageDal>();
 
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
             builder.RegisterAssemblyTypes(assembly).AsImplementedInterfaces().EnableInterfaceInterceptors(new ProxyGenerationOptions()

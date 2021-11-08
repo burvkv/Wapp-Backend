@@ -22,7 +22,7 @@ namespace WebAPI.Controllers
         [HttpPost("updateprofile")]
         public IActionResult UpdateProfile(User user,IFormFile file)
         {
-           var data =  _userService.UpdateProfile(user);
+           var data =  _userService.UpdateProfile(user,file);
             if (data.Success)
             {
                 return Ok();

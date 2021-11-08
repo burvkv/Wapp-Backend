@@ -14,7 +14,7 @@ namespace Core.Entity.Concrete
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
         public bool Status { get; set; }
-        public string Image { get; set; }
+        public int? ImageId { get; set; }
 
     }
 }

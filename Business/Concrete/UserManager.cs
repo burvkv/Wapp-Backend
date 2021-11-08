@@ -17,11 +17,12 @@ namespace Business.Concrete
     {
         IUserDal _userDal;
         IFileHelper _fileHelper;
-
-        public UserManager(IUserDal userDal,IFileHelper fileHelper)
+        IImageService _imageService;
+        public UserManager(IUserDal userDal,IFileHelper fileHelper, IImageService imageService)
         {
             _userDal = userDal;
             _fileHelper = fileHelper;
+            _imageService = imageService;
         }
 
         public List<OperationClaim> GetClaims(User user)
@@ -47,8 +48,14 @@ namespace Business.Concrete
                 return new ErrorResult(Messages.ImageFailed);
             }
 
-            user.Image = imageResult.Message;
 
+            _imageService.Add(new Entity.Concrete.Image
+            {
+                ImagePath = imageResult.Message
+            });
+
+
+            user.ImageId = _imageService.Get(imageResult.Message).Data.Id;
            _userDal.Update(user);
             return new SuccessResult(Messages.Updated);
 
