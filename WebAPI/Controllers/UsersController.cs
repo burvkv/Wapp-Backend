@@ -14,26 +14,29 @@ namespace WebAPI.Controllers
     public class UsersController : ControllerBase
     {
         IUserService _userService;
-        public UsersController(IUserService userService)
+        IImageService _imageService;
+        public UsersController(IUserService userService , IImageService imageService)
         {
             _userService = userService;
+            _imageService = imageService;
         }
 
         [HttpPost("updateprofile")]
-        public IActionResult UpdateProfile(User user,IFormFile file)
+        public IActionResult UpdateProfile(IFormFile file,[FromForm] User user)
         {
            var data =  _userService.UpdateProfile(user,file);
+          
             if (data.Success)
             {
-                return Ok();
+                return Ok(data);
             }
-            return BadRequest();
+            return BadRequest(data);
         }
 
         [HttpGet("getcurrentuser")]
         public IActionResult GetCurrent(User user)
         {
-            var data = _userService.GetByMail(user.Email);
+            var data = _userService.GetByMail(user.Username);
 
             return Ok(data);
         }

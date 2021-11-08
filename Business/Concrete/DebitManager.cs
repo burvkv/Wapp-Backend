@@ -1,5 +1,8 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constants;
+using Core.Aspect.Autofac.Caching;
+using Core.Aspect.Autofac.Transaction;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entity.Concrete;
@@ -19,25 +22,43 @@ namespace Business.Concrete
         {
             _debitDal = debitDal;
         }
+
+        //[ValidationAspect(typeof(OurServiceImageValidator))]
+        [TransactionScopeAspect]
+        [CacheRemoveAspect("IDebitService.Get")]
+        [SecuredOperation("admin,IT")]
         public IResult Add(Debit debit)
         {
             _debitDal.Insert(debit);
             return new SuccessResult(Messages.Debitted);
         }
 
+
+
+        [TransactionScopeAspect]
+        [CacheRemoveAspect("IDebitService.Get")]
+        [SecuredOperation("admin,IT")]
         public IResult Delete(Debit debit)
         {
             _debitDal.Delete(debit);
             return new SuccessResult(Messages.Deleted);
         }
 
-       
 
+
+
+        [CacheAspect]
+        [SecuredOperation("admin,IT,Guest")]
         public IDataResult<Debit> GetById(int id)
         {
             return new SuccessDataResult<Debit>(_debitDal.GetById(p=>p.DebitId.Equals(id)));
         }
 
+
+
+
+        [CacheAspect]
+        [SecuredOperation("admin,IT,Guest")]
         public IDataResult<List<DebitDto>> GetList(string key = null)
         {
             if (key == null)
@@ -47,6 +68,12 @@ namespace Business.Concrete
             return new SuccessDataResult<List<DebitDto>>(_debitDal.GetList(key));
         }
 
+
+
+        //[ValidationAspect(typeof(OurServiceImageValidator))]
+        [TransactionScopeAspect]
+        [CacheRemoveAspect("IDebitService.Get")]
+        [SecuredOperation("admin,IT")]
         public IResult Update(Debit debit)
         {
             _debitDal.Update(debit);

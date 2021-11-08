@@ -30,7 +30,7 @@ namespace Business.Concrete
             HashingHelper.CreatePasswordHash(password, out passwordHash, out passwordSalt);
             var user = new User
             {
-                Email = userForRegisterDto.Username,
+                Username = userForRegisterDto.Username,
                 FirstName = userForRegisterDto.FirstName,
                 LastName = userForRegisterDto.LastName,
                 PasswordHash = passwordHash,
@@ -57,9 +57,9 @@ namespace Business.Concrete
             return new SuccessDataResult<User>(userToCheck, "Giriş Başarılı");
         }
 
-        public IResult UserExists(string email)
+        public IResult UserExists(string username)
         {
-            if (_userService.GetByMail(email) != null)
+            if (_userService.GetByMail(username) != null)
             {
                 return new ErrorResult(Messages.UserAlreadyExists);
             }
@@ -68,6 +68,7 @@ namespace Business.Concrete
 
         public IDataResult<AccessToken> CreateAccessToken(User user)
         {
+
             var claims = _userService.GetClaims(user);
             var accessToken = _tokenHelper.CreateToken(user, claims);
             return new SuccessDataResult<AccessToken>(accessToken, Messages.AccessTokenCreated);

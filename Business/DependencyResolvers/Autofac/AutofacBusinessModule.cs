@@ -18,8 +18,8 @@ namespace Business.DependencyResolvers.Autofac
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<AuthManager>().As<IAuthService>();
-            builder.RegisterType<JwtHelper>().As<ITokenHelper>();
+           
+           
 
             builder.RegisterType<DebitManager>().As<IDebitService>();
             builder.RegisterType<EfDebitDal>().As<IDebitDal>();
@@ -46,8 +46,13 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<EfUserDal>().As<IUserDal>();
 
             builder.RegisterType<FileHelper>().As<IFileHelper>();
+
             builder.RegisterType<ImageManager>().As<IImageService>();
             builder.RegisterType<EfImageDal>().As<IImageDal>();
+
+            builder.RegisterType<AuthManager>().As<IAuthService>();
+            builder.RegisterType<JwtHelper>().As<ITokenHelper>();
+
 
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
             builder.RegisterAssemblyTypes(assembly).AsImplementedInterfaces().EnableInterfaceInterceptors(new ProxyGenerationOptions()

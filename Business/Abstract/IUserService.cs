@@ -13,7 +13,7 @@ namespace Business.Abstract
     {
         List<OperationClaim> GetClaims(User user);
         void Add(User user);
-        User GetByMail(string email);
-        IResult UpdateProfile(User user,IFormFile formFile);
+        User GetByMail(string username);
+        IResult UpdateProfile(User user,IFormFile file);
     }
 }

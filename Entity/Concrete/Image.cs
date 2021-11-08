@@ -10,6 +10,7 @@ namespace Entity.Concrete
     public class Image:IEntity
     {
         public string ImagePath { get; set; }
+        public int UserId { get; set; }
         public int Id { get; set; }
 
     }

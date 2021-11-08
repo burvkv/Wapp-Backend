@@ -3,7 +3,10 @@ using Business.Constants;
 using Core.Entity.Concrete;
 using Core.Utilities.Helpers;
 using Core.Utilities.Results;
+using Core.Utilities.Security.Hashing;
+using Core.Utilities.Security.JWT;
 using DataAccess.Abstract;
+using Entity.Concrete;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -18,11 +21,14 @@ namespace Business.Concrete
         IUserDal _userDal;
         IFileHelper _fileHelper;
         IImageService _imageService;
-        public UserManager(IUserDal userDal,IFileHelper fileHelper, IImageService imageService)
+        ITokenHelper _tokenHelper;
+        public UserManager(IUserDal userDal,IFileHelper fileHelper, IImageService imageService, ITokenHelper tokenHelper)
         {
             _userDal = userDal;
             _fileHelper = fileHelper;
             _imageService = imageService;
+            _tokenHelper = tokenHelper;
+        
         }
 
         public List<OperationClaim> GetClaims(User user)
@@ -35,28 +41,19 @@ namespace Business.Concrete
             _userDal.Insert(user);
         }
 
-        public User GetByMail(string email)
+        public User GetByMail(string username)
         {
-            return _userDal.GetById(u => u.Email == email);
+            return _userDal.GetById(u => u.Username == username);
         }
 
-        public IResult UpdateProfile(User user,IFormFile formFile)
+        public IResult UpdateProfile(User user,IFormFile file)
         {
-            var imageResult = _fileHelper.Upload(formFile);
-            if (!imageResult.Success)
-            {
-                return new ErrorResult(Messages.ImageFailed);
-            }
 
-
-            _imageService.Add(new Entity.Concrete.Image
-            {
-                ImagePath = imageResult.Message
-            });
-
-
-            user.ImageId = _imageService.Get(imageResult.Message).Data.Id;
-           _userDal.Update(user);
+            
+           
+           
+            _imageService.Add(file,user.Id);
+            
             return new SuccessResult(Messages.Updated);
 
         }

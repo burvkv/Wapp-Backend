@@ -28,9 +28,11 @@ namespace DataAccess.Concrete
         public DbSet<Model> Models { get; set; }
         public DbSet<Label> Labels { get; set; }
 
+        public DbSet<Image> Images { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySQL("server=mysql06.trwww.com;database=arcaserv_twxlsappdb;user=trenkwalder;password=TrenkWalder1!");
+            optionsBuilder.UseMySQL("server=mysql06.trwww.com;database=arcaserv_wappdb;user=trenkwalder;password=TrenkWalder1!");
         }
        
         protected override void OnModelCreating(ModelBuilder modelBuilder)

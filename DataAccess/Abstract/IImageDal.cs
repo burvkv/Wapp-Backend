@@ -6,6 +6,6 @@ namespace DataAccess.Abstract
 {
     public interface IImageDal : IEntityRepository<Image>
     {
-        Image Get(string path);
+        Image Get(int userId);
     }
 }

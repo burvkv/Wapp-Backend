@@ -1,5 +1,6 @@
 ﻿using Core.Utilities.Results;
 using Entity.Concrete;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,9 @@ namespace Business.Abstract
 {
     public interface IImageService
     {
-        IResult Add(Image image);
+        IResult Add(IFormFile file, int userId);
         IResult delete(Image image);
         IResult Update(Image image);
-         IDataResult<Image> Get(string path);
+         IDataResult<Image> Get(int userId);
     }
 }

@@ -28,7 +28,7 @@ namespace Entity.Concrete
         public string Explanation { get; set; }
         [ForeignKey("PersonalId")]
         public int PersonalId { get; set; }
-        public int Count { get; set; }
+
 
 
 
