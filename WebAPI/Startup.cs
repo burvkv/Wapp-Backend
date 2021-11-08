@@ -58,6 +58,7 @@ namespace WebAPI
                 new CoreModule()
             });
 
+            services.AddSwaggerGen();
 
         }
 

@@ -1,5 +1,7 @@
 ﻿using Business.Abstract;
+using Business.Constants;
 using Core.Entity.Concrete;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using System;
 using System.Collections.Generic;
@@ -31,6 +33,13 @@ namespace Business.Concrete
         public User GetByMail(string email)
         {
             return _userDal.GetById(u => u.Email == email);
+        }
+
+        public IResult UpdateProfile(User user)
+        {
+           _userDal.Update(user);
+            return new SuccessResult(Messages.Updated);
+
         }
     }
 }
