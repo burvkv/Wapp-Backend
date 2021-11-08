@@ -15,6 +15,6 @@ namespace Business.Constants
         public static string Added = "Ekleme işlemi başarılı.";
         public static string UserAlreadyExists = "Böyle bir kullanıcı zaten var.";
         public static string AccessTokenCreated = "Token Oluşturuldu";
-
+        public static string ImageFailed = "Fotoğraf yüklenirken bir hata oluştu.";
     }
 }

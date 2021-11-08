@@ -20,7 +20,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("updateprofile")]
-        public IActionResult UpdateProfile(User user)
+        public IActionResult UpdateProfile(User user,IFormFile file)
         {
            var data =  _userService.UpdateProfile(user);
             if (data.Success)
