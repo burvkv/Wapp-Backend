@@ -18,6 +18,8 @@ namespace Business.Abstract
         IResult Add(Debit debit);
         IResult Delete(Debit debit);
         IResult Update(Debit debit);
+       
+
     }
 
 

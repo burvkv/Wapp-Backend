@@ -13,17 +13,20 @@ namespace DataAccess.Concrete
 {
     public class EfDebitDal : EfEntityRepositoryBase<Debit, TwAppContext>, IDebitDal
     {
+        
+
         public List<DebitDto> GetList(string key = null)
         {
             using (TwAppContext context = new TwAppContext())
             {
+
                 var data = from debit in context.Debits
                            join dStatus in context.DebitStatuses on debit.DebitStatusId equals dStatus.Id
                            join oOwner in context.Employees on debit.OlderOwnerId equals oOwner.EmployeeId
                            join owner in context.Employees on debit.OwnerId equals owner.EmployeeId
                            join hardware in context.Hardwares on debit.HardwareId equals hardware.Id
                            join project in context.Projects on debit.ProjectId equals project.ProjectId
-
+                           join user in context.Users on debit.PersonalId equals user.Id
                            join model in context.Models on hardware.ModelId equals model.ModelId
                            join label in context.Labels on hardware.LabelId equals label.LabelId
 
@@ -38,9 +41,11 @@ namespace DataAccess.Concrete
                                HardwareLabel = label.LabelName,
                                HardwareModel = model.ModelName,
                                HardwareType = hardware.Type,
-                               IsActive = debit.IsActive,
+                               IsCurrent = debit.IsCurrent,
+                               LastChange = debit.LastChange,
+                               ProjectName = project.ProjectName,
+                               PersonalName = $"{user.FirstName} {user.LastName}"
 
-                               ProjectName = project.ProjectName
 
 
 

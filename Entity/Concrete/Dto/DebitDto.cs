@@ -20,7 +20,8 @@ namespace Entity.Concrete.Dto
         public string ProjectName { get; set; }
         public string OlderOwnerName { get; set; }
         public string Explanation { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsCurrent { get; set; }
+        public DateTime LastChange { get; set; }
         public string PersonalName { get; set; }
 
 

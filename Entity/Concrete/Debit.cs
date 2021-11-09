@@ -21,7 +21,8 @@ namespace Entity.Concrete
         public int OlderOwnerId { get; set; }
         [ForeignKey("OwnerId")]
         public int OwnerId { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsCurrent { get; set; }
+        public DateTime LastChange { get; set; }
         public int HardwareId { get; set; }
         [ForeignKey("ProjectId")]
         public int ProjectId { get; set; }
@@ -29,7 +30,8 @@ namespace Entity.Concrete
         [ForeignKey("PersonalId")]
         public int PersonalId { get; set; }
 
-
+        //Her zimmet oluşturulyrjen yazılımda formu oluşturulup tutulacak.
+        public string DebitFormPath { get; set; }
 
 
     }

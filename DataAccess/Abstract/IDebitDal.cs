@@ -13,6 +13,6 @@ namespace DataAccess.Abstract
     public interface IDebitDal:IEntityRepository<Debit>
 {
         List<DebitDto> GetList(string key = null);
-       
+      
 }
 }
