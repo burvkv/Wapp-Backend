@@ -12,7 +12,7 @@ namespace Business.Abstract
     public interface IUserService
     {
         List<OperationClaim> GetClaims(User user);
-        void Add(User user);
+        IResult Add(User user, int[] userOperationClaimIds);
         User GetByMail(string username);
         IResult UpdateProfile(User user,IFormFile file);
     }

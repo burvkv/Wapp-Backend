@@ -1,5 +1,9 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constants;
+using Core.Aspect.Autofac.Caching;
+using Core.Aspect.Autofac.Performance;
+using Core.Aspect.Autofac.Transaction;
 using Core.Entity.Concrete;
 using Core.Utilities.Results;
 using Core.Utilities.Security.Hashing;
@@ -24,7 +28,11 @@ namespace Business.Concrete
             _tokenHelper = tokenHelper;
         }
 
-        public IDataResult<User> Register(UserForRegisterDto userForRegisterDto, string password)
+        //[SecuredOperation("admin")]
+        [TransactionScopeAspect]
+        [PerformanceAspect(5)]
+        [CacheRemoveAspect("IUserService.Get")]
+        public IDataResult<User> Register(UserForRegisterDto userForRegisterDto, string password,int[] userOperationClaimIds)
         {
             byte[] passwordHash, passwordSalt;
             HashingHelper.CreatePasswordHash(password, out passwordHash, out passwordSalt);
@@ -37,10 +45,12 @@ namespace Business.Concrete
                 PasswordSalt = passwordSalt,
                 Status = true                
             };
-            _userService.Add(user);
+            _userService.Add(user, userOperationClaimIds);
             return new SuccessDataResult<User>(user, "Kayıt başarılı.");
         }
 
+        [TransactionScopeAspect]
+        [PerformanceAspect(5)]
         public IDataResult<User> Login(UserForLoginDto userForLoginDto)
         {
             var userToCheck = _userService.GetByMail(userForLoginDto.Username);

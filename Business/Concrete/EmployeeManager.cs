@@ -1,5 +1,9 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constants;
+using Core.Aspect.Autofac.Caching;
+using Core.Aspect.Autofac.Performance;
+using Core.Aspect.Autofac.Transaction;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entity.Concrete;
@@ -15,18 +19,30 @@ namespace Business.Concrete
         {
             _employeeDal = employeeDal;
         }
+        [TransactionScopeAspect]
+        [PerformanceAspect(5)]
+        [SecuredOperation("Admin,IT")]
+        [CacheRemoveAspect("IEmployeeService.Get")]
         public IResult Add(Employee employee)
         {
             _employeeDal.Insert(employee);
             return new SuccessResult(Messages.Added);
         }
 
+        [TransactionScopeAspect]
+        [PerformanceAspect(5)]
+        [SecuredOperation("Admin,IT")]
+        [CacheRemoveAspect("IEmployeeService.Get")]
         public IResult Delete(Employee employee)
         {
             _employeeDal.Delete(employee);
             return new SuccessResult(Messages.Deleted);
         }
 
+
+        [PerformanceAspect(5)]
+        [SecuredOperation("Admin,IT,Guest")]
+        [CacheAspect]
         public IDataResult<List<EmployeeDto>> GetList(string key = null)
 
         {
@@ -38,8 +54,11 @@ namespace Business.Concrete
             
         }
 
-        
 
+        [TransactionScopeAspect]
+        [PerformanceAspect(5)]
+        [SecuredOperation("Admin,IT")]
+        [CacheRemoveAspect("IEmployeeService.Get")]
         public IResult Update(Employee employee)
         {
             _employeeDal.Update(employee);

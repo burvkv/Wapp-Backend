@@ -2,6 +2,7 @@
 using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Core.Aspect.Autofac.Caching;
+using Core.Aspect.Autofac.Performance;
 using Core.Aspect.Autofac.Transaction;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
@@ -25,6 +26,7 @@ namespace Business.Concrete
 
         //[ValidationAspect(typeof(OurServiceImageValidator))]
         [TransactionScopeAspect]
+        [PerformanceAspect(5)]
         [CacheRemoveAspect("IDebitService.Get")]
         [SecuredOperation("admin,IT")]
         public IResult Add(Debit debit)
@@ -34,7 +36,7 @@ namespace Business.Concrete
         }
 
 
-
+        [PerformanceAspect(5)]
         [TransactionScopeAspect]
         [CacheRemoveAspect("IDebitService.Get")]
         [SecuredOperation("admin,IT")]
@@ -46,7 +48,7 @@ namespace Business.Concrete
 
 
 
-
+        [PerformanceAspect(5)]
         [CacheAspect]
         [SecuredOperation("admin,IT,Guest")]
         public IDataResult<Debit> GetById(int id)
@@ -56,7 +58,7 @@ namespace Business.Concrete
 
 
 
-
+        [PerformanceAspect(5)]
         [CacheAspect]
         [SecuredOperation("admin,IT,Guest")]
         public IDataResult<List<DebitDto>> GetList(string key = null)
@@ -69,7 +71,7 @@ namespace Business.Concrete
         }
 
 
-
+        [PerformanceAspect(5)]
         //[ValidationAspect(typeof(OurServiceImageValidator))]
         [TransactionScopeAspect]
         [CacheRemoveAspect("IDebitService.Get")]

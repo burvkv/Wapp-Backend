@@ -24,6 +24,9 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<DebitManager>().As<IDebitService>();
             builder.RegisterType<EfDebitDal>().As<IDebitDal>();
 
+            builder.RegisterType<UserOperationClaimManager>().As<IUserOperationClaimService>();
+            builder.RegisterType<EfUserOperationClaimDal>().As<IUserOperationClaimDal>();
+
             builder.RegisterType<DebitStatusManager>().As<IDebitStatusService>();
             builder.RegisterType<EfDebitStatusDal>().As<IDebitStatusDal>();
 

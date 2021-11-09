@@ -1,5 +1,9 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constants;
+using Core.Aspect.Autofac.Caching;
+using Core.Aspect.Autofac.Performance;
+using Core.Aspect.Autofac.Transaction;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entity.Concrete;
@@ -19,23 +23,39 @@ namespace Business.Concrete
         {
             _hardwareDal = hardwareDal;
         }
+        [TransactionScopeAspect]
+        [PerformanceAspect(5)]
+        [SecuredOperation("Admin,IT")]
+        [CacheRemoveAspect("IHardwareService.Get")]
         public IResult Add(Hardware hardware)
         {
             _hardwareDal.Insert(hardware);
             return new SuccessResult(Messages.Added);
         }
 
+        [TransactionScopeAspect]
+        [PerformanceAspect(5)]
+        [SecuredOperation("Admin,IT")]
+        [CacheRemoveAspect("IHardwareService.Get")]
         public IResult Delete(Hardware hardware)
         {
             _hardwareDal.Delete(hardware);
             return new SuccessResult(Messages.Deleted);
         }
 
+
+        [PerformanceAspect(5)]
+        [SecuredOperation("Admin,IT,Guest")]
+        [CacheAspect]
         public IDataResult<Hardware> GetById(int id)
         {
             return new SuccessDataResult<Hardware>(_hardwareDal.GetById(p=>p.Id == id));
         }
 
+
+        [PerformanceAspect(5)]
+        [SecuredOperation("Admin,IT,Guest")]
+        [CacheAspect]
         public IDataResult<List<HardwareDto>> GetList(string key = null)
         {
             if (key == null)
@@ -48,6 +68,10 @@ namespace Business.Concrete
             }
         }
 
+        [TransactionScopeAspect]
+        [PerformanceAspect(5)]
+        [SecuredOperation("Admin,IT")]
+        [CacheRemoveAspect("IHardwareService.Get")]
         public IResult Update(Hardware hardware)
         {
             _hardwareDal.Update(hardware);

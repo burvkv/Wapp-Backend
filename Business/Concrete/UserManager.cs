@@ -1,5 +1,9 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constants;
+using Core.Aspect.Autofac.Caching;
+using Core.Aspect.Autofac.Performance;
+using Core.Aspect.Autofac.Transaction;
 using Core.Entity.Concrete;
 using Core.Utilities.Helpers;
 using Core.Utilities.Results;
@@ -19,41 +23,54 @@ namespace Business.Concrete
     public class UserManager : IUserService
     {
         IUserDal _userDal;
-        IFileHelper _fileHelper;
         IImageService _imageService;
-        ITokenHelper _tokenHelper;
-        public UserManager(IUserDal userDal,IFileHelper fileHelper, IImageService imageService, ITokenHelper tokenHelper)
+        IUserOperationClaimService _operationClaimService;
+
+        public UserManager(IUserDal userDal, IImageService imageService, IUserOperationClaimService operationClaimService)
         {
             _userDal = userDal;
-            _fileHelper = fileHelper;
             _imageService = imageService;
-            _tokenHelper = tokenHelper;
-        
+            _operationClaimService = operationClaimService;
+
         }
 
+        [CacheAspect]
+        [PerformanceAspect(5)]
+        [SecuredOperation("Admin,IT")]
         public List<OperationClaim> GetClaims(User user)
         {
             return _userDal.GetClaims(user);
         }
 
-        public void Add(User user)
+        [TransactionScopeAspect]
+        [PerformanceAspect(5)]
+        [CacheRemoveAspect("IUserServise.Get")]
+        [SecuredOperation("Admin,IT")]
+        public IResult Add(User user, int[] userOperationClaimIds)
         {
+
             _userDal.Insert(user);
+            _operationClaimService.AddClaimsToUser(_userDal.GetById(u => u.Username == user.Username), userOperationClaimIds);
+            return new SuccessResult();
         }
 
+        [SecuredOperation("Admin,IT,Guest")]
+        [PerformanceAspect(5)]
+        [CacheAspect]
         public User GetByMail(string username)
         {
             return _userDal.GetById(u => u.Username == username);
         }
 
-        public IResult UpdateProfile(User user,IFormFile file)
+        [TransactionScopeAspect]
+        [PerformanceAspect(5)]
+        [CacheRemoveAspect("IUserServise.Get")]
+        [SecuredOperation("Admin,IT")]
+        public IResult UpdateProfile(User user, IFormFile file)
         {
 
-            
-           
-           
-            _imageService.Add(file,user.Id);
-            
+            _imageService.Add(file, user.Id);
+
             return new SuccessResult(Messages.Updated);
 
         }

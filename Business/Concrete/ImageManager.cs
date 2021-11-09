@@ -1,5 +1,9 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constants;
+using Core.Aspect.Autofac.Caching;
+using Core.Aspect.Autofac.Performance;
+using Core.Aspect.Autofac.Transaction;
 using Core.Utilities.Helpers;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
@@ -22,7 +26,10 @@ namespace Business.Concrete
             _imageDal = imageDal;
             _fileHelper = fileHelper;
         }
-
+        [TransactionScopeAspect]
+        [PerformanceAspect(5)]
+        [SecuredOperation("Admin,IT,Guest")]
+        [CacheRemoveAspect("IImageService.Get")]
         public IResult Add(IFormFile file, int userId)
         {
             var imageResult = _fileHelper.Upload(file);
@@ -53,18 +60,30 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
+        [TransactionScopeAspect]
+        [PerformanceAspect(5)]
+        [SecuredOperation("Admin,IT,Guest")]
+        [CacheRemoveAspect("IImageService.Get")]
         public IResult delete(Image image)
         {
             _imageDal.Delete(image);
             return new SuccessResult();
         }
 
+        [TransactionScopeAspect]
+        [PerformanceAspect(5)]
+        [SecuredOperation("Admin,IT,Guest")]
+        [CacheRemoveAspect("IImageService.Get")]
         public IResult Update(Image image)
         {
             _imageDal.Update(image);
             return new SuccessResult();
         }
 
+
+        [PerformanceAspect(5)]
+        [SecuredOperation("Admin,IT,Guest")]
+        [CacheAspect)]
         public IDataResult<Image> Get(int userId)
         {
             return new SuccessDataResult<Image>(_imageDal.Get(userId));

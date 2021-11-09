@@ -1,5 +1,9 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constants;
+using Core.Aspect.Autofac.Caching;
+using Core.Aspect.Autofac.Performance;
+using Core.Aspect.Autofac.Transaction;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entity.Concrete;
@@ -17,23 +21,39 @@ namespace Business.Concrete
 
         }
 
+        [TransactionScopeAspect]
+        [PerformanceAspect(5)]
+        [SecuredOperation("Admin,IT")]
+        [CacheRemoveAspect("IProjectService.Get")]
         public IResult Add(Project project)
         {
             _projectDal.Insert(project);
             return new SuccessResult(Messages.Added);
         }
 
+        [TransactionScopeAspect]
+        [PerformanceAspect(5)]
+        [SecuredOperation("Admin,IT")]
+        [CacheRemoveAspect("IProjectService.Get")]
         public IResult Delete(Project project)
         {
             _projectDal.Delete(project);
             return new SuccessResult(Messages.Deleted);
         }
 
+ 
+        [PerformanceAspect(5)]
+        [SecuredOperation("Admin,IT,Guest")]
+        [CacheAspect]
         public IDataResult<Project> GetById(int id)
         {
             return new SuccessDataResult<Project>(_projectDal.GetById(p => p.ProjectId == id));
         }
 
+
+        [PerformanceAspect(5)]
+        [SecuredOperation("Admin,IT,Guest")]
+        [CacheAspect]
         public IDataResult<List<ProjectDto>> GetList(string key = null)
         {
             if (key == null)
@@ -43,6 +63,10 @@ namespace Business.Concrete
             return new SuccessDataResult<List<ProjectDto>>(_projectDal.GetList(key));
         }
 
+        [TransactionScopeAspect]
+        [PerformanceAspect(5)]
+        [SecuredOperation("Admin,IT")]
+        [CacheRemoveAspect("IProjectService.Get")]
         public IResult Update(Project project)
         {
             _projectDal.Update(project);
