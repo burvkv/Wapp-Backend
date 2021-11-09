@@ -30,6 +30,67 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
+
+        [HttpGet("getallbyhardwaretype")]
+        public IActionResult GetAllByHardwareType(string hardwareType)
+        {
+            var result = _debitService.GetList();
+            if (result.Success)
+            {
+                result.Data.Where(d => d.HardwareType.Equals(hardwareType));
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpGet("getallbydebitstatus")]
+        public IActionResult GetAllByDebitStatus(string status)
+        {
+            var result = _debitService.GetList();
+            if (result.Success)
+            {
+                result.Data.Where(d => d.DebitStatus.Equals(status));
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpGet("getallbyownername")]
+        public IActionResult GetAllByOlderOwnerName(string ownerName)
+        {
+            var result = _debitService.GetList();
+            if (result.Success)
+            {
+                result.Data.Where(d => d.OwnerName.Equals(ownerName));
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpGet("sortbydate")]
+        public IActionResult GetAllByAddedDate()
+        {
+            var result = _debitService.GetList();
+            if (result.Success)
+            {
+                result.Data.OrderBy(d => d.LastChange);
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpGet("getallbyprojectname")]
+        public IActionResult GetAllByProjectName(string projectName)
+        {
+            var result = _debitService.GetList();
+            if (result.Success)
+            {
+                result.Data.Where(d=>d.ProjectName.Equals(projectName));
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
         [HttpGet("getbyid")]
         public IActionResult GetById(int id)
         {
