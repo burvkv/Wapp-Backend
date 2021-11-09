@@ -36,7 +36,6 @@ namespace Business.Concrete
 
         [CacheAspect]
         [PerformanceAspect(5)]
-        [SecuredOperation("Admin,IT")]
         public List<OperationClaim> GetClaims(User user)
         {
             return _userDal.GetClaims(user);
@@ -54,7 +53,6 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
-        [SecuredOperation("Admin,IT,Guest")]
         [PerformanceAspect(5)]
         [CacheAspect]
         public User GetByMail(string username)

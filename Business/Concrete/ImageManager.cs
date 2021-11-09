@@ -83,7 +83,7 @@ namespace Business.Concrete
 
         [PerformanceAspect(5)]
         [SecuredOperation("Admin,IT,Guest")]
-        [CacheAspect)]
+        [CacheAspect]
         public IDataResult<Image> Get(int userId)
         {
             return new SuccessDataResult<Image>(_imageDal.Get(userId));
