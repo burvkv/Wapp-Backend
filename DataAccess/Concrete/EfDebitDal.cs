@@ -19,7 +19,8 @@ namespace DataAccess.Concrete
         {
             using (TwAppContext context = new TwAppContext())
             {
-
+               
+               
                 var data = from debit in context.Debits
                            join dStatus in context.DebitStatuses on debit.DebitStatusId equals dStatus.Id
                            join oldO in context.Employees on debit.OlderOwnerId equals oldO.EmployeeId
@@ -29,13 +30,14 @@ namespace DataAccess.Concrete
                            join model in context.Models on hardware.ModelId equals model.ModelId
                            join user in context.Users on debit.PersonalId equals user.Id
                            join project in context.Projects on debit.ProjectId equals project.ProjectId
+                           
                            select new DebitDto
                            {
                                DebitId = debit.DebitId,
                                DebitStatus = dStatus.Status,
                                Explanation = debit.Explanation,
                                OlderOwnerName = $"{oldO.FirstName} {oldO.LastName}",
-                               OwnerName = $"{owner.FirstName} {owner.LastName}",
+                               OwnerName = $"{owner.FirstName} {owner.LastName}",                              
                                HardwareBarcode = hardware.Barcode,
                                HardwareLabel = label.LabelName,
                                HardwareModel = model.ModelName,
@@ -43,13 +45,10 @@ namespace DataAccess.Concrete
                                IsCurrent = debit.IsCurrent,
                                LastChange = debit.LastChange,
                                PersonalName = $"{user.FirstName} {user.LastName}",
-                               ProjectName = project.ProjectName,
-
-
-
-
-
+                               ProjectName = project.ProjectName                                                             
                            };
+               
+                
                 if (key == null)
                 {
                     return data.ToList();

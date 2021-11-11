@@ -44,6 +44,7 @@ namespace Business.Concrete
             debit.IsCurrent = true;
             debit.LastChange = DateTime.Now;
             int i = 0;
+            
             foreach (var debitId in debit.HardwareIds)
             {
                 
