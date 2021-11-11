@@ -15,9 +15,9 @@ namespace Business.Abstract
         IDataResult<List<DebitDto>> GetList(string key = null);
 
         IDataResult<Debit> GetById(int id);
-        IResult Add(Debit debit);
-        IResult Delete(Debit debit);
-        IResult Update(Debit debit);
+        IResult Add(DebitForAddDto debit);
+        IResult Delete(DebitForAddDto debit);
+        IResult Update(DebitForAddDto debit);
        
 
     }

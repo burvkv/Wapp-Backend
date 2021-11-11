@@ -1,9 +1,11 @@
 ﻿using Business.Abstract;
 using Business.BusinessAspects.Autofac;
 using Business.Constants;
+using Business.Validation.FluentValidation;
 using Core.Aspect.Autofac.Caching;
 using Core.Aspect.Autofac.Performance;
 using Core.Aspect.Autofac.Transaction;
+using Core.Aspect.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entity.Concrete;
@@ -27,8 +29,10 @@ namespace Business.Concrete
         [PerformanceAspect(5)]
         [SecuredOperation("Admin,IT")]
         [CacheRemoveAspect("IHardwareService.Get")]
+        [ValidationAspect(typeof(HardwareValidator))]
         public IResult Add(Hardware hardware)
         {
+
             _hardwareDal.Insert(hardware);
             return new SuccessResult(Messages.Added);
         }
@@ -49,7 +53,8 @@ namespace Business.Concrete
         [CacheAspect]
         public IDataResult<Hardware> GetById(int id)
         {
-            return new SuccessDataResult<Hardware>(_hardwareDal.GetById(p=>p.Id == id));
+            var result =  new SuccessDataResult<Hardware>(_hardwareDal.GetById(p=>p.Id == id));
+            return result;
         }
 
 
@@ -68,6 +73,7 @@ namespace Business.Concrete
             }
         }
 
+        [ValidationAspect(typeof(HardwareValidator))]
         [TransactionScopeAspect]
         [PerformanceAspect(5)]
         [SecuredOperation("Admin,IT")]

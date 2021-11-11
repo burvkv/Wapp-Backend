@@ -1,17 +1,13 @@
 ﻿using Core.Entity.Abstract;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
-namespace Entity.Concrete
+namespace Entity.Concrete.Dto
 {
     [Table("Debits")]
-    public class Debit : IEntity
+    public class DebitForAddDto : IEntity
     {
         [Key]
         public int DebitId { get; set; }
@@ -20,7 +16,7 @@ namespace Entity.Concrete
         public int OwnerId { get; set; }
         public bool IsCurrent { get; set; }
         public DateTime LastChange { get; set; }
-        public int HardwareId { get; set; }
+        public int[] HardwareIds { get; set; }
         public int ProjectId { get; set; }
 #nullable enable
         public string? Explanation { get; set; }

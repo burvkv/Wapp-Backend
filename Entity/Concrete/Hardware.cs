@@ -12,7 +12,6 @@ namespace Entity.Concrete
 {
     public class Hardware:IEntity
     {
-        private bool _value;
         [Key]
         public int Id { get; set; }
         public string Barcode { get; set; }
@@ -22,20 +21,11 @@ namespace Entity.Concrete
         public int ModelId { get; set; }
         public string Type { get; set; }
         public bool IsDefective { get; set; }
-        public string Explanation { get; set; }
-        public bool IsDebitted
-        {
-            get { return _value; } set
-            {
-                if (IsDefective)
-                {
-                    _value = false;
-                }
-                else
-                {
-                    _value = true;
-                };
-            } }
+#nullable enable
+        public string? Explanation { get; set; }
+        public bool IsDebitted { get; set; }
+        
+           
 
     }
 }

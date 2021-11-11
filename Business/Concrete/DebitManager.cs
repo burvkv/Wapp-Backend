@@ -1,9 +1,12 @@
 ﻿using Business.Abstract;
 using Business.BusinessAspects.Autofac;
 using Business.Constants;
+using Business.Validation.FluentValidation;
 using Core.Aspect.Autofac.Caching;
 using Core.Aspect.Autofac.Performance;
 using Core.Aspect.Autofac.Transaction;
+using Core.Aspect.Autofac.Validation;
+using Core.Utilities.Business;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entity.Concrete;
@@ -19,22 +22,50 @@ namespace Business.Concrete
     public class DebitManager : IDebitService
     {
         IDebitDal _debitDal;
-        public DebitManager(IDebitDal debitDal)
+        IHardwareService _hardwareService;
+        public DebitManager(IDebitDal debitDal,IHardwareService hardwareService)
         {
             _debitDal = debitDal;
+            _hardwareService = hardwareService;
         }
 
-        //[ValidationAspect(typeof(OurServiceImageValidator))]
+        [ValidationAspect(typeof(DebitValidator))]
         [TransactionScopeAspect]
         [PerformanceAspect(5)]
         [CacheRemoveAspect("IDebitService.Get")]
         [SecuredOperation("admin,IT")]
-        public IResult Add(Debit debit)
+        public IResult Add(DebitForAddDto debit)
         {
+            IResult result = BusinessRules.Run(CheckIfHardwaresAlreadyDebitted(debit.HardwareIds));
+            if (result!=null)
+            {
+                return new ErrorResult(result.Message);
+            }
             debit.IsCurrent = true;
             debit.LastChange = DateTime.Now;
+            int i = 0;
+            foreach (var debitId in debit.HardwareIds)
+            {
+                
+               Debit debitForAdd =  new Debit
+                {
+                    DebitFormPath = debit.DebitFormPath,
+                    DebitId = debit.DebitId,
+                    DebitStatusId = debit.DebitStatusId,
+                    Explanation = debit.Explanation,
+                    HardwareId = debit.HardwareIds[i],
+                    IsCurrent = debit.IsCurrent,
+                    LastChange = debit.LastChange,
+                    OlderOwnerId = debit.OlderOwnerId,
+                    OwnerId = debit.OwnerId,
+                    PersonalId = debit.PersonalId,
+                    ProjectId = debit.ProjectId
+                };
+                _debitDal.Insert(debitForAdd);
+                i++;
+            }
             // add form
-            _debitDal.Insert(debit);
+            
             return new SuccessResult(Messages.Debitted);
         }
 
@@ -43,9 +74,30 @@ namespace Business.Concrete
         [TransactionScopeAspect]
         [CacheRemoveAspect("IDebitService.Get")]
         [SecuredOperation("admin,IT")]
-        public IResult Delete(Debit debit)
+        public IResult Delete(DebitForAddDto debit)
         {
-            _debitDal.Delete(debit);
+            int i = 0;
+            foreach (var debitId in debit.HardwareIds)
+            {
+
+                Debit debitForAdd = new Debit
+                {
+                    DebitFormPath = debit.DebitFormPath,
+                    DebitId = debit.DebitId,
+                    DebitStatusId = debit.DebitStatusId,
+                    Explanation = debit.Explanation,
+                    HardwareId = debit.HardwareIds[i],
+                    IsCurrent = debit.IsCurrent,
+                    LastChange = debit.LastChange,
+                    OlderOwnerId = debit.OlderOwnerId,
+                    OwnerId = debit.OwnerId,
+                    PersonalId = debit.PersonalId,
+                    ProjectId = debit.ProjectId
+                };
+                _debitDal.Delete(debitForAdd);
+                i++;
+            }
+        
             return new SuccessResult(Messages.Deleted);
         }
 
@@ -75,16 +127,51 @@ namespace Business.Concrete
 
 
         [PerformanceAspect(5)]
-        //[ValidationAspect(typeof(OurServiceImageValidator))]
+        [ValidationAspect(typeof(DebitValidator))]
         [TransactionScopeAspect]
         [CacheRemoveAspect("IDebitService.Get")]
         [SecuredOperation("admin,IT")]
-        public IResult Update(Debit debit)
+        public IResult Update(DebitForAddDto debit)
         {
             debit.IsCurrent = true;
             debit.LastChange = DateTime.Now;
-            _debitDal.Update(debit);
+
+            int i = 0;
+            foreach (var debitId in debit.HardwareIds)
+            {
+
+                Debit debitForAdd = new Debit
+                {
+                    DebitFormPath = debit.DebitFormPath,
+                    DebitId = debit.DebitId,
+                    DebitStatusId = debit.DebitStatusId,
+                    Explanation = debit.Explanation,
+                    HardwareId = debit.HardwareIds[i],
+                    IsCurrent = debit.IsCurrent,
+                    LastChange = debit.LastChange,
+                    OlderOwnerId = debit.OlderOwnerId,
+                    OwnerId = debit.OwnerId,
+                    PersonalId = debit.PersonalId,
+                    ProjectId = debit.ProjectId
+                };
+                _debitDal.Update(debitForAdd);
+                i++;
+            }
+            
             return new SuccessResult(Messages.Updated);
+        }
+
+        private IResult CheckIfHardwaresAlreadyDebitted(int[] ids)
+        {
+            foreach (var id in ids)
+            {
+                bool result = _hardwareService.GetById(id).Data.IsDebitted;
+                if (result)
+                {
+                    return new ErrorResult($"{_hardwareService.GetById(id).Data.Barcode} Barkod numaralı ürün zaten zimmetli.");
+                }
+            }
+            return new SuccessResult();
         }
     }
 }

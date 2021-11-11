@@ -53,7 +53,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("add")]
-        public IActionResult Add(Debit debit)
+        public IActionResult Add(DebitForAddDto debit)
         {
            
             var result = _debitService.Add(debit);
@@ -65,7 +65,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("delete")]
-        public IActionResult Delete(Debit debit)
+        public IActionResult Delete(DebitForAddDto debit)
         {
 
             var result = _debitService.Delete(debit);
@@ -77,7 +77,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("update")]
-        public IActionResult Update(Debit debit)
+        public IActionResult Update(DebitForAddDto debit)
         {
 
             var result = _debitService.Update(debit);

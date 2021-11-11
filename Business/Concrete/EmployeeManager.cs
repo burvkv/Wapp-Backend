@@ -1,9 +1,11 @@
 ﻿using Business.Abstract;
 using Business.BusinessAspects.Autofac;
 using Business.Constants;
+using Business.Validation.FluentValidation;
 using Core.Aspect.Autofac.Caching;
 using Core.Aspect.Autofac.Performance;
 using Core.Aspect.Autofac.Transaction;
+using Core.Aspect.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entity.Concrete;
@@ -24,6 +26,7 @@ namespace Business.Concrete
         [PerformanceAspect(5)]
         [SecuredOperation("Admin,IT")]
         [CacheRemoveAspect("IEmployeeService.Get")]
+        [ValidationAspect(typeof(EmployeeValidator))]
         public IResult Add(Employee employee)
         {
             employee.EnterDate = DateTime.Now;
@@ -57,7 +60,7 @@ namespace Business.Concrete
             
         }
 
-
+        [ValidationAspect(typeof(EmployeeValidator))]
         [TransactionScopeAspect]
         [PerformanceAspect(5)]
         [SecuredOperation("Admin,IT")]
