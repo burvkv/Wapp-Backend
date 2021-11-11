@@ -1,6 +1,8 @@
 ﻿using Business.Abstract;
 using Entity.Concrete;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace WebAPI.Controllers
 {
@@ -24,6 +26,64 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
+
+      [HttpGet("gethardwarescountbydebitstatus")]
+      public IActionResult GetHardwaresCountByDebitStatus()
+        {
+            var result = _hardwareService.GetList();
+
+            List<CountOfHardwares> countOfHardwares = new List<CountOfHardwares>
+            {
+               new CountOfHardwares
+               {
+                   Count = result.Data.Where(c => c.IsDebitted == true).Count(),
+                   IsActive = true
+               },
+               new CountOfHardwares
+               {
+                  Count = result.Data.Where(c => c.IsDebitted == false).Count(),
+                   IsActive = false
+               }
+            };
+
+
+
+            if (result.Success)
+            {
+                return Ok(countOfHardwares);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpGet("gethardwarescountbydefectstatus")]
+        public IActionResult GetHardwaresCountByDefectStatus()
+        {
+            var result = _hardwareService.GetList();
+
+            List<CountOfHardwares> countOfHardwares = new List<CountOfHardwares>
+            {
+               new CountOfHardwares
+               {
+                   Count = result.Data.Where(c => c.IsDefective == true).Count(),
+                   IsActive = true
+               },
+               new CountOfHardwares
+               {
+                  Count = result.Data.Where(c => c.IsDefective == false).Count(),
+                   IsActive = false
+               }
+            };
+
+
+
+            if (result.Success)
+            {
+                return Ok(countOfHardwares);
+            }
+            return BadRequest(result);
+        }
+
+
 
         [HttpGet("add")]
         public IActionResult Add(Hardware hardware)
@@ -68,5 +128,10 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
+    }
+    internal class CountOfHardwares
+    {
+        public int Count { get; set; }
+        public bool IsActive { get; set; }
     }
 }

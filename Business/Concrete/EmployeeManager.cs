@@ -8,6 +8,7 @@ using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entity.Concrete;
 using Entity.Concrete.Dto;
+using System;
 using System.Collections.Generic;
 
 namespace Business.Concrete
@@ -25,7 +26,9 @@ namespace Business.Concrete
         [CacheRemoveAspect("IEmployeeService.Get")]
         public IResult Add(Employee employee)
         {
-            _employeeDal.Insert(employee);
+            employee.EnterDate = DateTime.Now;
+            employee.LeftDate = null;
+            _employeeDal.Insert(employee);          
             return new SuccessResult(Messages.Added);
         }
 

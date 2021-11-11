@@ -31,6 +31,9 @@ namespace Business.Concrete
         [SecuredOperation("admin,IT")]
         public IResult Add(Debit debit)
         {
+            debit.IsCurrent = true;
+            debit.LastChange = DateTime.Now;
+            // add form
             _debitDal.Insert(debit);
             return new SuccessResult(Messages.Debitted);
         }
@@ -78,6 +81,8 @@ namespace Business.Concrete
         [SecuredOperation("admin,IT")]
         public IResult Update(Debit debit)
         {
+            debit.IsCurrent = true;
+            debit.LastChange = DateTime.Now;
             _debitDal.Update(debit);
             return new SuccessResult(Messages.Updated);
         }

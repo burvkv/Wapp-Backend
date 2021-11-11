@@ -14,7 +14,7 @@ namespace Entity.Concrete
         [Key]
         public int ProjectId { get; set; }
         public string ProjectName { get; set; }
-        [ForeignKey("LeaderId")]
+  
         public int LeaderId { get; set; }
 
     }

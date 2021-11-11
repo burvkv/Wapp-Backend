@@ -32,7 +32,7 @@ namespace DataAccess.Concrete
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySQL("server=mysql06.trwww.com;database=arcaserv_wappdb;user=trenkwalder;password=TrenkWalder1!");
+            optionsBuilder.UseMySQL("server=mysql06.trwww.com;database=arcaserv_wappdb;user=trenkwalder;password=TrenkWalder1!;convert zero datetime=True");
         }
        
         protected override void OnModelCreating(ModelBuilder modelBuilder)

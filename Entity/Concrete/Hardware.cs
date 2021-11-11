@@ -16,9 +16,9 @@ namespace Entity.Concrete
         [Key]
         public int Id { get; set; }
         public string Barcode { get; set; }
-        [ForeignKey("LabelId")]
+      
         public int LabelId { get; set; }
-        [ForeignKey("ModelId")]
+       
         public int ModelId { get; set; }
         public string Type { get; set; }
         public bool IsDefective { get; set; }
