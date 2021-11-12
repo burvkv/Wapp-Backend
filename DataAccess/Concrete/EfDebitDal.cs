@@ -13,13 +13,10 @@ namespace DataAccess.Concrete
 {
     public class EfDebitDal : EfEntityRepositoryBase<Debit, TwAppContext>, IDebitDal
     {
-
-
         public List<DebitDto> GetList(string key = null)
         {
             using (TwAppContext context = new TwAppContext())
             {
-
                 var data = from debit in context.Debits
                            join dStatus in context.DebitStatuses on debit.DebitStatusId equals dStatus.Id
                            join oldO in context.Employees on debit.OlderOwnerId equals oldO.EmployeeId
@@ -45,9 +42,7 @@ namespace DataAccess.Concrete
                                LastChange = debit.LastChange,
                                PersonalName = $"{user.FirstName} {user.LastName}",
                                ProjectName = project.ProjectName                                                             
-                           };
-               
-                
+                           };               
                 if (key == null)
                 {
                     return data.ToList();
@@ -56,13 +51,7 @@ namespace DataAccess.Concrete
                 {
                     return data.Where(p => p.HardwareBarcode.Contains(key)).ToList();
                 }
-
-
             }
         }
-
-
-
-
     }
 }

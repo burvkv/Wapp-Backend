@@ -122,7 +122,7 @@ namespace Business.Concrete
         {
             if (key == null)
             {
-                return new SuccessDataResult<List<DebitDto>>(_debitDal.GetList());
+                return  new SuccessDataResult<List<DebitDto>>(_debitDal.GetList());
             }
             return new SuccessDataResult<List<DebitDto>>(_debitDal.GetList(key));
         }
@@ -163,15 +163,15 @@ namespace Business.Concrete
             return new SuccessResult(Messages.Updated);
         }
 
-        private IResult CheckIfHardwaresAlreadyDebitted(string ids)
+        private IResult CheckIfHardwaresAlreadyDebitted(int[] ids)
         {
-            string[] result = ids.Split("-");
-            foreach (var id in result)
+            
+            foreach (var id in ids)
             {
-                bool result2 = _hardwareService.GetById(int.Parse(id)).Data.IsDebitted;
+                bool result2 = _hardwareService.GetById(id).Data.IsDebitted;
                 if (result2)
                 {
-                    return new ErrorResult($"{_hardwareService.GetById(int.Parse(id)).Data.Barcode} Barkod numaralı ürün zaten zimmetli.");
+                    return new ErrorResult($"{_hardwareService.GetById(id).Data.Barcode} Barkod numaralı ürün zaten zimmetli.");
                 }
             }
             return new SuccessResult();
