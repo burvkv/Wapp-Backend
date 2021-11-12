@@ -74,8 +74,6 @@ namespace WebAPI.Controllers
                }
             };
 
-
-
             if (result.Success)
             {
                 return Ok(countOfHardwares);
