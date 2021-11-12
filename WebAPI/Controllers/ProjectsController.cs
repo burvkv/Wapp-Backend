@@ -18,6 +18,7 @@ namespace WebAPI.Controllers
         public IActionResult GetList(string key = null)
         {
             var result = _projectService.GetList(key);
+            
             if (result.Success)
             {
                 return Ok(result);
@@ -45,7 +46,7 @@ namespace WebAPI.Controllers
                 return Ok(result);
             }
             return BadRequest(result);
-            
+
         }
 
         [HttpPost("delete")]

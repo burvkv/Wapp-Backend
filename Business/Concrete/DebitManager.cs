@@ -41,6 +41,7 @@ namespace Business.Concrete
             {
                 return new ErrorResult(result.Message);
             }
+            
             debit.IsCurrent = true;
             debit.LastChange = DateTime.Now;
             int i = 0;
@@ -162,14 +163,15 @@ namespace Business.Concrete
             return new SuccessResult(Messages.Updated);
         }
 
-        private IResult CheckIfHardwaresAlreadyDebitted(int[] ids)
+        private IResult CheckIfHardwaresAlreadyDebitted(string ids)
         {
-            foreach (var id in ids)
+            string[] result = ids.Split("-");
+            foreach (var id in result)
             {
-                bool result = _hardwareService.GetById(id).Data.IsDebitted;
-                if (result)
+                bool result2 = _hardwareService.GetById(int.Parse(id)).Data.IsDebitted;
+                if (result2)
                 {
-                    return new ErrorResult($"{_hardwareService.GetById(id).Data.Barcode} Barkod numaralı ürün zaten zimmetli.");
+                    return new ErrorResult($"{_hardwareService.GetById(int.Parse(id)).Data.Barcode} Barkod numaralı ürün zaten zimmetli.");
                 }
             }
             return new SuccessResult();

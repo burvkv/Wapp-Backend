@@ -19,8 +19,7 @@ namespace DataAccess.Concrete
         {
             using (TwAppContext context = new TwAppContext())
             {
-               
-               
+
                 var data = from debit in context.Debits
                            join dStatus in context.DebitStatuses on debit.DebitStatusId equals dStatus.Id
                            join oldO in context.Employees on debit.OlderOwnerId equals oldO.EmployeeId

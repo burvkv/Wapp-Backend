@@ -39,7 +39,7 @@ namespace Business.Concrete
 
         [TransactionScopeAspect]
         [PerformanceAspect(5)]
-        [SecuredOperation("Admin,IT")]
+        [SecuredOperation("Admin")]
         [CacheRemoveAspect("IHardwareService.Get")]
         public IResult Delete(Hardware hardware)
         {

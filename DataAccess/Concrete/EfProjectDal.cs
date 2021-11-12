@@ -20,10 +20,13 @@ namespace DataAccess.Concrete
                            {
                                LeaderName = $"{empl.FirstName} {empl.LastName}",
                                ProjectId = proj.ProjectId,
+                              
                                ProjectName = proj.ProjectName
                            };
 
-                if (key == null)
+               
+
+                if (key != null)
                 {
                     return data.Where(p => p.ProjectName.Contains(key)).ToList();
                 }
