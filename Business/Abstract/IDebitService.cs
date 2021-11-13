@@ -12,8 +12,8 @@ namespace Business.Abstract
     public interface IDebitService
     {
         
-        IDataResult<List<DebitDto>> GetList(string key = null);
-
+        IDataResult<List<DebitForGetDto>> GetList(string key = null);
+        IDataResult<DebitDetailDto> GetDebitDetails(int id);
         IDataResult<Debit> GetById(int id);
         IResult Add(DebitForAddDto debit);
         IResult Delete(DebitForAddDto debit);

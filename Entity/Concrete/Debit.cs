@@ -20,7 +20,7 @@ namespace Entity.Concrete
         public int OwnerId { get; set; }
         public bool IsCurrent { get; set; }
         public DateTime LastChange { get; set; }
-        public int HardwareId { get; set; }
+        public string HardwareIds { get; set; }
         public int ProjectId { get; set; }
 #nullable enable
         public string? Explanation { get; set; }

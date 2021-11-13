@@ -73,7 +73,7 @@ namespace Business.Concrete
             }
         }
 
-        [ValidationAspect(typeof(HardwareValidator))]
+ 
         [TransactionScopeAspect]
         [PerformanceAspect(5)]
         [SecuredOperation("Admin,IT")]

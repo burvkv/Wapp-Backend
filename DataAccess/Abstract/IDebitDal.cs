@@ -12,7 +12,8 @@ namespace DataAccess.Abstract
 {
     public interface IDebitDal:IEntityRepository<Debit>
 {
-        List<DebitDto> GetList(string key = null);
+        List<DebitForGetDto> GetList(string key = null);
+        DebitDetailDto GetDebitDetails(int id);
         
       
 }

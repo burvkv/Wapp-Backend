@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace Entity.Concrete.Dto
 {
-    public class DebitDto:IDto
+    public class DebitDetailDto:IDto
     {
         public int DebitId { get; set; }
         public string OwnerName { get; set; }
-        public string HardwareType { get; set; }
-        public string HardwareLabel { get; set; }
-        public string HardwareModel { get; set; }
-        public string HardwareBarcode { get; set; }
+        public string[] HardwareType { get; set; }
+        public string[] HardwareLabel { get; set; }
+        public string[] HardwareModel { get; set; }
+        public string[] HardwareBarcode { get; set; }
         public string DebitStatus { get; set; }
         public string ProjectName { get; set; }
         public string OlderOwnerName { get; set; }

@@ -13,7 +13,7 @@ namespace Business.Validation.FluentValidation
         public DebitValidator()
         {
             RuleFor(x => x.DebitStatusId).NotEmpty();
-            RuleFor(x => x.HardwareId).NotEmpty();
+            RuleFor(x => x.HardwareIds).NotEmpty();
             RuleFor(x => x.OwnerId).NotEmpty();
             RuleFor(x => x.ProjectId).NotEmpty();
         }
