@@ -59,6 +59,7 @@ namespace WebAPI
             });
 
             services.AddSwaggerGen();
+            services.AddCors();
 
         }
 
@@ -72,6 +73,9 @@ namespace WebAPI
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPI v1"));
             }
+
+            //Frontend geliþtirilirken apiye istek yapacak baðlantýyý týrnak içine yaz.
+            app.UseCors(builder=>builder.WithOrigins("").AllowAnyHeader());
 
             app.UseHttpsRedirection();
 
