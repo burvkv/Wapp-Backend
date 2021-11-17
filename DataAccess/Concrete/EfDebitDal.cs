@@ -51,7 +51,6 @@ namespace DataAccess.Concrete
                 DebitDetailDto dtoForGet = new DebitDetailDto();
                 
                 int i = 0;
-                int count = 0;
                 foreach (var ids in data)
                 {
                     
