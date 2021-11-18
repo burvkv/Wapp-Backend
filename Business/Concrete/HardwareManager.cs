@@ -35,6 +35,7 @@ namespace Business.Concrete
         [SecuredOperation("Admin,IT")]
         [CacheRemoveAspect("IHardwareService.Get")]
         [ValidationAspect(typeof(HardwareValidator))]
+        [LogAspect(typeof(FileLogger))]
         public IResult Add(Hardware hardware)
         {
 
@@ -94,6 +95,7 @@ namespace Business.Concrete
         [PerformanceAspect(5)]
         [SecuredOperation("Admin,IT")]
         [CacheRemoveAspect("IHardwareService.Get")]
+        [LogAspect(typeof(FileLogger))]
         public IResult Update(Hardware hardware)
         {
             _hardwareDal.Update(hardware);

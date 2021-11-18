@@ -2,8 +2,10 @@
 using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Core.Aspect.Autofac.Caching;
+using Core.Aspect.Autofac.Logging;
 using Core.Aspect.Autofac.Performance;
 using Core.Aspect.Autofac.Transaction;
+using Core.CrossCuttingConcerns.Logging.Log4Net.Loggers.FileLogger;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entity.Concrete;
@@ -23,6 +25,7 @@ namespace Business.Concrete
         [PerformanceAspect(5)]
         [SecuredOperation("Admin,IT")]
         [CacheRemoveAspect("ILabelService.Get")]
+        [LogAspect(typeof(FileLogger))]
         public IResult Add(Label label)
         {
             _labelDal.Insert(label);
@@ -33,6 +36,7 @@ namespace Business.Concrete
         [PerformanceAspect(5)]
         [SecuredOperation("Admin,IT")]
         [CacheRemoveAspect("ILabelService.Get")]
+        [LogAspect(typeof(FileLogger))]
         public IResult Delete(Label label)
         {
             _labelDal.Delete(label);
@@ -61,6 +65,7 @@ namespace Business.Concrete
         [PerformanceAspect(5)]
         [SecuredOperation("Admin,IT")]
         [CacheRemoveAspect("ILabelService.Get")]
+        [LogAspect(typeof(FileLogger))]
         public IResult Update(Label label)
         {
             _labelDal.Update(label);

@@ -1,7 +1,9 @@
 ﻿using Business.Abstract;
 using Business.BusinessAspects.Autofac;
+using Core.Aspect.Autofac.Logging;
 using Core.Aspect.Autofac.Performance;
 using Core.Aspect.Autofac.Transaction;
+using Core.CrossCuttingConcerns.Logging.Log4Net.Loggers.FileLogger;
 using Core.Entity.Concrete;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
@@ -26,6 +28,7 @@ namespace Business.Concrete
         [TransactionScopeAspect]
         [PerformanceAspect(5)]
         [SecuredOperation("Admin,IT")]
+        [LogAspect(typeof(FileLogger))]
         public IResult AddClaimsToUser(User user, int[] operationClaimIds)
         {
             
@@ -44,6 +47,7 @@ namespace Business.Concrete
         [TransactionScopeAspect]
         [PerformanceAspect(5)]
         [SecuredOperation("Admin,IT")]
+        [LogAspect(typeof(FileLogger))]
         public IResult DeleteClaimsToUser(User user, int[] operationClaimIds)
         {
 

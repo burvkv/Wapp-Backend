@@ -3,9 +3,11 @@ using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Business.Validation.FluentValidation;
 using Core.Aspect.Autofac.Caching;
+using Core.Aspect.Autofac.Logging;
 using Core.Aspect.Autofac.Performance;
 using Core.Aspect.Autofac.Transaction;
 using Core.Aspect.Autofac.Validation;
+using Core.CrossCuttingConcerns.Logging.Log4Net.Loggers.FileLogger;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entity.Concrete;
@@ -27,6 +29,7 @@ namespace Business.Concrete
         [SecuredOperation("Admin,IT")]
         [CacheRemoveAspect("IEmployeeService.Get")]
         [ValidationAspect(typeof(EmployeeValidator))]
+        [LogAspect(typeof(FileLogger))]
         public IResult Add(Employee employee)
         {
             employee.EnterDate = DateTime.Now;
@@ -39,6 +42,7 @@ namespace Business.Concrete
         [PerformanceAspect(5)]
         [SecuredOperation("Admin,IT")]
         [CacheRemoveAspect("IEmployeeService.Get")]
+        [LogAspect(typeof(FileLogger))]
         public IResult Delete(Employee employee)
         {
             _employeeDal.Delete(employee);
@@ -65,6 +69,7 @@ namespace Business.Concrete
         [PerformanceAspect(5)]
         [SecuredOperation("Admin,IT")]
         [CacheRemoveAspect("IEmployeeService.Get")]
+        [LogAspect(typeof(FileLogger))]
         public IResult Update(Employee employee)
         {
             _employeeDal.Update(employee);

@@ -36,6 +36,7 @@ namespace Business.Concrete
         [PerformanceAspect(5)]
         [CacheRemoveAspect("IDebitService.Get")]
         [SecuredOperation("admin,IT")]
+        [LogAspect(typeof(FileLogger))]
         public IResult Add(DebitForAddDto debit)
         {
             IResult result = BusinessRules.Run(CheckIfHardwaresAlreadyDebitted(debit.HardwareIds));
@@ -90,6 +91,7 @@ namespace Business.Concrete
         [TransactionScopeAspect]
         [CacheRemoveAspect("IDebitService.Get")]
         [SecuredOperation("admin,IT")]
+        [LogAspect(typeof(FileLogger))]
         public IResult Delete(DebitForAddDto debit)
         {
 
@@ -149,6 +151,7 @@ namespace Business.Concrete
         [TransactionScopeAspect]
         [CacheRemoveAspect("IDebitService.Get")]
         [SecuredOperation("admin,IT")]
+        [LogAspect(typeof(FileLogger))]
         public IResult Update(DebitForAddDto debit)
         {
             debit.IsCurrent = true;

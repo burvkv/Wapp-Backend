@@ -2,8 +2,10 @@
 using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Core.Aspect.Autofac.Caching;
+using Core.Aspect.Autofac.Logging;
 using Core.Aspect.Autofac.Performance;
 using Core.Aspect.Autofac.Transaction;
+using Core.CrossCuttingConcerns.Logging.Log4Net.Loggers.FileLogger;
 using Core.Entity.Concrete;
 using Core.Utilities.Helpers;
 using Core.Utilities.Results;
@@ -45,6 +47,7 @@ namespace Business.Concrete
         [PerformanceAspect(5)]
         [CacheRemoveAspect("IUserServise.Get")]
         [SecuredOperation("Admin,IT")]
+        [LogAspect(typeof(FileLogger))]
         public IResult Add(User user, int[] userOperationClaimIds)
         {
 
@@ -64,6 +67,7 @@ namespace Business.Concrete
         [PerformanceAspect(5)]
         [CacheRemoveAspect("IUserServise.Get")]
         [SecuredOperation("Admin,IT")]
+        [LogAspect(typeof(FileLogger))]
         public IResult UpdateProfile(User user, IFormFile file)
         {
 

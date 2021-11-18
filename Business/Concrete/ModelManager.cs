@@ -2,8 +2,10 @@
 using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Core.Aspect.Autofac.Caching;
+using Core.Aspect.Autofac.Logging;
 using Core.Aspect.Autofac.Performance;
 using Core.Aspect.Autofac.Transaction;
+using Core.CrossCuttingConcerns.Logging.Log4Net.Loggers.FileLogger;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entity.Concrete;
@@ -23,6 +25,7 @@ namespace Business.Concrete
         [PerformanceAspect(5)]
         [SecuredOperation("Admin,IT")]
         [CacheRemoveAspect("IModelService.Get")]
+        [LogAspect(typeof(FileLogger))]
         public IResult Add(Model model)
         {
             _modelDal.Insert(model);
@@ -33,6 +36,7 @@ namespace Business.Concrete
         [PerformanceAspect(5)]
         [SecuredOperation("Admin,IT")]
         [CacheRemoveAspect("IModelService.Get")]
+        [LogAspect(typeof(FileLogger))]
         public IResult Delete(Model model)
         {
             _modelDal.Delete(model);
@@ -61,6 +65,7 @@ namespace Business.Concrete
         [PerformanceAspect(5)]
         [SecuredOperation("Admin,IT")]
         [CacheRemoveAspect("IModelService.Get")]
+        [LogAspect(typeof(FileLogger))]
         public IResult Update(Model model)
         {
             _modelDal.Update(model);
