@@ -19,6 +19,7 @@ namespace Entity.Concrete.Dto
         public bool IsDefective { get; set; }
 #nullable enable
         public string? Explanation { get; set; }
+#nullable disable
         public bool IsDebitted { get; set; }
         public string  UserName { get; set; }
     }
