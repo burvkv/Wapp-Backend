@@ -3,9 +3,12 @@ using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Business.Validation.FluentValidation;
 using Core.Aspect.Autofac.Caching;
+using Core.Aspect.Autofac.Logging;
 using Core.Aspect.Autofac.Performance;
 using Core.Aspect.Autofac.Transaction;
 using Core.Aspect.Autofac.Validation;
+using Core.CrossCuttingConcerns.Logging.Log4Net.Loggers.FileLogger;
+using Core.Utilities.Helpers.MailHelper;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entity.Concrete;
@@ -21,8 +24,10 @@ namespace Business.Concrete
     public class HardwareManager : IHardwareService
     {
         IHardwareDal _hardwareDal;
-        public HardwareManager(IHardwareDal hardwareDal)
+        IDailyReportHelper _dailyReportHelper;
+        public HardwareManager(IHardwareDal hardwareDal, IDailyReportHelper dailyReportHelper)
         {
+            _dailyReportHelper = dailyReportHelper;
             _hardwareDal = hardwareDal;
         }
         [TransactionScopeAspect]
@@ -41,9 +46,20 @@ namespace Business.Concrete
         [PerformanceAspect(5)]
         [SecuredOperation("Admin")]
         [CacheRemoveAspect("IHardwareService.Get")]
-        public IResult Delete(Hardware hardware)
+        [LogAspect(typeof(FileLogger))]
+        public IResult Delete(DeletedHardwareLogModelDto hardware)
         {
-            _hardwareDal.Delete(hardware);
+           _hardwareDal.Delete(new Hardware {
+                Barcode = hardware.Barcode,
+                Explanation = hardware.Explanation,
+                Id = hardware.Id,
+                IsDebitted = hardware.IsDebitted,
+                IsDefective = hardware.IsDefective,
+                LabelId = hardware.LabelId,
+                ModelId = hardware.ModelId,
+                Type = hardware.Type
+            });
+            _dailyReportHelper.CreateDailyReport(hardware);
             return new SuccessResult(Messages.Deleted);
         }
 

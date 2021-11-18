@@ -1,10 +1,11 @@
 ﻿using Autofac;
 using Autofac.Extras.DynamicProxy;
 using Business.Abstract;
+using Business.BusinessHelpers.MailHelper;
 using Business.Concrete;
-using Business.Helpers.XamlHelper;
 using Castle.DynamicProxy;
 using Core.Utilities.Helpers;
+using Core.Utilities.Helpers.MailHelper;
 using Core.Utilities.Interceptors;
 using Core.Utilities.Security.JWT;
 using DataAccess.Abstract;
@@ -19,8 +20,7 @@ namespace Business.DependencyResolvers.Autofac
     {
         protected override void Load(ContainerBuilder builder)
         {
-
-            builder.RegisterType<WordHelper>().As<IWordHelper>();
+            builder.RegisterType<DailyReportHelper>().As<IDailyReportHelper>();
 
             builder.RegisterType<DebitManager>().As<IDebitService>();
             builder.RegisterType<EfDebitDal>().As<IDebitDal>();

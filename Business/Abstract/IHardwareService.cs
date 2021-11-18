@@ -11,7 +11,7 @@ namespace Business.Abstract
         IDataResult<List<HardwareDto>> GetList(string key = null);       
         IDataResult<Hardware> GetById(int id);
         IResult Add(Hardware hardware);
-        IResult Delete(Hardware hardware);
+        IResult Delete(DeletedHardwareLogModelDto hardware);
         IResult Update(Hardware hardware);
     }
 

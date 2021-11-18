@@ -1,5 +1,7 @@
 ﻿using Business.Abstract;
+using Core.Utilities.Helpers.MailHelper;
 using Entity.Concrete;
+using Entity.Concrete.Dto;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
@@ -83,7 +85,7 @@ namespace WebAPI.Controllers
 
 
 
-        [HttpGet("add")]
+        [HttpPost("add")]
         public IActionResult Add(Hardware hardware)
         {
             var result = _hardwareService.Add(hardware);
@@ -94,10 +96,11 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("delete")]
-        public IActionResult Delete(Hardware hardware)
+        [HttpPost("delete")]
+        public IActionResult Delete(DeletedHardwareLogModelDto hardware)
         {
             var result = _hardwareService.Delete(hardware);
+            
             if (result.Success)
             {
                 return Ok(result);
@@ -105,7 +108,7 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("update")]
+        [HttpPost("update")]
         public IActionResult Update(Hardware hardware)
         {
             var result = _hardwareService.Update(hardware);
