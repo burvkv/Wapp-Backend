@@ -154,6 +154,12 @@ namespace Business.Concrete
         [LogAspect(typeof(FileLogger))]
         public IResult Update(DebitForAddDto debit)
         {
+            IResult result = BusinessRules.Run(CheckIfHardwaresAlreadyDebitted(debit.HardwareIds));
+            if (result != null)
+            {
+                return new ErrorResult(result.Message);
+            }
+
             debit.IsCurrent = true;
             debit.LastChange = DateTime.Now;
 
@@ -183,8 +189,8 @@ namespace Business.Concrete
             
             foreach (var id in ids)
             {
-                bool result2 = _hardwareService.GetById(id).Data.IsDebitted;
-                if (result2)
+                bool isAlreadyDebitted = _hardwareService.GetById(id).Data.IsDebitted;
+                if (isAlreadyDebitted)
                 {
                     return new ErrorResult($"{_hardwareService.GetById(id).Data.Barcode} Barkod numaralı ürün zaten zimmetli.");
                 }
