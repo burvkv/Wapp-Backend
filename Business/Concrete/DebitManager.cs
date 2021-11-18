@@ -25,7 +25,7 @@ namespace Business.Concrete
     {
         IDebitDal _debitDal;
         IHardwareService _hardwareService;
-        public DebitManager(IDebitDal debitDal,IHardwareService hardwareService)
+        public DebitManager(IDebitDal debitDal, IHardwareService hardwareService)
         {
             _debitDal = debitDal;
             _hardwareService = hardwareService;
@@ -40,50 +40,56 @@ namespace Business.Concrete
         public IResult Add(DebitForAddDto debit)
         {
             IResult result = BusinessRules.Run(CheckIfHardwaresAlreadyDebitted(debit.HardwareIds));
-            if (result!=null)
+            if (result != null)
             {
                 return new ErrorResult(result.Message);
             }
-            
-            debit.IsCurrent = true;
-            debit.LastChange = DateTime.Now;
-            
-               Debit debitForAdd =  new Debit
-                {
-                    DebitFormPath = debit.DebitFormPath,
-                    DebitId = debit.DebitId,
-                    DebitStatusId = debit.DebitStatusId,
-                    Explanation = debit.Explanation,
-                    HardwareIds = string.Join("-",debit.HardwareIds).ToString(),
-                    IsCurrent = debit.IsCurrent,
-                    LastChange = debit.LastChange,
-                    OlderOwnerId = debit.OlderOwnerId,
-                    OwnerId = debit.OwnerId,
-                    PersonalId = debit.PersonalId,
-                    ProjectId = debit.ProjectId
-                };
-            
-                _debitDal.Insert(debitForAdd);
-            foreach (var id in debit.HardwareIds)
+            _debitDal.Insert(SetDebitForCrud(debit));
+            HardwareUpdate(debit.HardwareIds,true);
+            // add form
+            return new SuccessResult(Messages.Debitted);
+        }
+
+        private void HardwareUpdate(int[] ids,bool isDebitted)
+        {
+            foreach (var id in ids)
             {
                 var hware = _hardwareService.GetById(id);
                 _hardwareService.Update(new Hardware
                 {
                     Id = id,
-                    IsDebitted = true,
+                    IsDebitted = isDebitted,
                     Barcode = hware.Data.Barcode,
                     Explanation = hware.Data.Explanation,
                     IsDefective = hware.Data.IsDefective,
                     LabelId = hware.Data.LabelId,
                     ModelId = hware.Data.ModelId,
                     Type = hware.Data.Type
-                    
+
                 });
             }
+        }
+        private Debit SetDebitForCrud(DebitForAddDto debit)
+        {
+            debit.IsCurrent = true;
+            debit.LastChange = DateTime.Now;
 
-            // add form
-            
-            return new SuccessResult(Messages.Debitted);
+            Debit debitForAdd = new Debit
+            {
+                DebitFormPath = debit.DebitFormPath,
+                DebitId = debit.DebitId,
+                DebitStatusId = debit.DebitStatusId,
+                Explanation = debit.Explanation,
+                HardwareIds = string.Join("-", debit.HardwareIds).ToString(),
+                IsCurrent = debit.IsCurrent,
+                LastChange = debit.LastChange,
+                OlderOwnerId = debit.OlderOwnerId,
+                OwnerId = debit.OwnerId,
+                PersonalId = debit.PersonalId,
+                ProjectId = debit.ProjectId
+            };
+
+            return debitForAdd;
         }
 
 
@@ -94,24 +100,9 @@ namespace Business.Concrete
         [LogAspect(typeof(FileLogger))]
         public IResult Delete(DebitForAddDto debit)
         {
-
-                Debit debitForAdd = new Debit
-                {
-                    DebitFormPath = debit.DebitFormPath,
-                    DebitId = debit.DebitId,
-                    DebitStatusId = debit.DebitStatusId,
-                    Explanation = debit.Explanation,
-                    HardwareIds = string.Join("-", debit.HardwareIds).ToString(),
-                    IsCurrent = debit.IsCurrent,
-                    LastChange = debit.LastChange,
-                    OlderOwnerId = debit.OlderOwnerId,
-                    OwnerId = debit.OwnerId,
-                    PersonalId = debit.PersonalId,
-                    ProjectId = debit.ProjectId
-                };
-                _debitDal.Delete(debitForAdd);
-
-        
+            Debit debitForDelete = _debitDal.GetById(d => d.DebitId == debit.DebitId);
+            _debitDal.Delete(debitForDelete);           
+            HardwareUpdate(debit.HardwareIds, false);
             return new SuccessResult(Messages.Deleted);
         }
 
@@ -122,7 +113,7 @@ namespace Business.Concrete
         [SecuredOperation("admin,IT,Guest")]
         public IDataResult<Debit> GetById(int id)
         {
-            return new SuccessDataResult<Debit>(_debitDal.GetById(p=>p.DebitId.Equals(id)));
+            return new SuccessDataResult<Debit>(_debitDal.GetById(p => p.DebitId.Equals(id)));
         }
 
         [PerformanceAspect(5)]
@@ -140,7 +131,7 @@ namespace Business.Concrete
         {
             if (key == null)
             {
-                return  new SuccessDataResult<List<DebitForGetDto>>(_debitDal.GetList());
+                return new SuccessDataResult<List<DebitForGetDto>>(_debitDal.GetList());
             }
             return new SuccessDataResult<List<DebitForGetDto>>(_debitDal.GetList(key));
         }
@@ -160,33 +151,15 @@ namespace Business.Concrete
                 return new ErrorResult(result.Message);
             }
 
-            debit.IsCurrent = true;
-            debit.LastChange = DateTime.Now;
-
-
-                Debit debitForAdd = new Debit
-                {
-                    DebitFormPath = debit.DebitFormPath,
-                    DebitId = debit.DebitId,
-                    DebitStatusId = debit.DebitStatusId,
-                    Explanation = debit.Explanation,
-                    HardwareIds = string.Join("-", debit.HardwareIds).ToString(),
-                    IsCurrent = debit.IsCurrent,
-                    LastChange = debit.LastChange,
-                    OlderOwnerId = debit.OlderOwnerId,
-                    OwnerId = debit.OwnerId,
-                    PersonalId = debit.PersonalId,
-                    ProjectId = debit.ProjectId
-                };
-                _debitDal.Update(debitForAdd);
-
-            
+           
+            _debitDal.Update(SetDebitForCrud(debit));
+            HardwareUpdate(debit.HardwareIds,true);
             return new SuccessResult(Messages.Updated);
         }
 
         private IResult CheckIfHardwaresAlreadyDebitted(int[] ids)
         {
-            
+
             foreach (var id in ids)
             {
                 bool isAlreadyDebitted = _hardwareService.GetById(id).Data.IsDebitted;
