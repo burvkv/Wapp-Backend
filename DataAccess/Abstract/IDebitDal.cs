@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Abstract
 {
-    public interface IDebitDal:IEntityRepository<Debit>
-{
+    public interface IDebitDal : IEntityRepository<Debit>
+    {
         List<DebitForGetDto> GetList(string key = null);
         DebitDetailDto GetDebitDetails(int id);
-        
-      
-}
+
+
+    }
 }

@@ -17,8 +17,9 @@ namespace Business.BusinessHelpers.MailHelper
             Dailyreport dailyReport = new Dailyreport
             {
                 Barcode = hardware.Barcode,
+                HardwareType = hardware.Type,
                 Date = DateTime.Now.ToString("HH.mm.ss dd/MM/yyyy"),
-                Body = $"{hardware.Barcode} Barkodlu donanım {DateTime.Now.ToString("HH.mm.ss dd/MM/yyyy")} tarihinde {hardware.UserName} tarafından silindi.",
+                Body = $"{hardware.Barcode} Barkodlu {hardware.Type} {DateTime.Now.ToString("HH.mm.ss dd/MM/yyyy")} tarihinde {hardware.UserName} tarafından silindi.",
                 UserName = hardware.UserName,
 
             };

@@ -30,6 +30,8 @@ namespace DataAccess.Concrete
 
         public DbSet<Image> Images { get; set; }
 
+        public DbSet<ToDo> ToDos { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseMySQL("server=mysql06.trwww.com;database=arcaserv_wappdb;user=trenkwalder;password=TrenkWalder1!;convert zero datetime=True");
