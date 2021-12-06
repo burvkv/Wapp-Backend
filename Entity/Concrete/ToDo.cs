@@ -14,7 +14,7 @@ namespace Entity.Concrete
         public string Explanation { get; set; }
         public string Date { get; set; }
         public string ProcessName { get; set; }
-        public int? StatusId { get; set; }
+        public bool Status { get; set; }
         public int UserId { get; set; }
 #nullable enable
         public string? Note { get; set; }

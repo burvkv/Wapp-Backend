@@ -29,7 +29,7 @@ namespace Business.Concrete
         public IResult Add(ToDo toDo)
         {
             toDo.Date = DateTime.Now.ToString("HH:mm / dd.MM.yyyy");
-            toDo.StatusId = 1; // 1 : New - 2 : Done  
+            toDo.Status = false; // 1 : New - 2 : Done  
             _toDoListDal.Insert(toDo);
             return new SuccessResult();
         }

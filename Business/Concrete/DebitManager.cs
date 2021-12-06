@@ -124,9 +124,9 @@ namespace Business.Concrete
             return new SuccessDataResult<DebitDetailDto>(_debitDal.GetDebitDetails(id));
         }
 
-        [PerformanceAspect(5)]
-        [CacheAspect]
-        [SecuredOperation("admin,IT,Guest")]
+        //[PerformanceAspect(5)]
+        //[CacheAspect]
+        //[SecuredOperation("admin,IT,Guest")]
         public IDataResult<List<DebitForGetDto>> GetList(string key = null)
         {
             if (key == null)
